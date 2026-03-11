@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AU VPP Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --paper: rgba(255, 250, 242, 0.88);
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-strong: #fffdf8;
+      --line: rgba(102, 74, 46, 0.14);
+      --text: #271b12;
+      --muted: #756252;
+      --accent: #bc5f2e;
+      --accent-soft: rgba(188, 95, 46, 0.12);
+      --teal: #1f7a6d;
+      --teal-soft: rgba(31, 122, 109, 0.12);
+      --gold: #b7791f;
+      --gold-soft: rgba(183, 121, 31, 0.12);
+      --red: #b64332;
+      --red-soft: rgba(182, 67, 50, 0.12);
+      --shadow: 0 24px 60px rgba(85, 55, 26, 0.12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Avenir Next", "SF Pro Display", "PingFang SC", "Noto Sans SC", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(188, 95, 46, 0.16), transparent 32%),
+        radial-gradient(circle at top right, rgba(31, 122, 109, 0.14), transparent 28%),
+        linear-gradient(180deg, #f8f4ee 0%, #f0e8dd 100%);
+    }
+
+    .wrap {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .topbar,
+    .hero,
+    .section,
+    .detail-card,
+    .timeline-card {
+      background: var(--paper);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .source-info {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .source-info .path {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--accent);
+    }
+
+    .file-loader {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .file-loader input[type="file"] {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--panel-strong);
+      color: var(--text);
+    }
+
+    .error-box {
+      display: none;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(182, 67, 50, 0.26);
+      background: rgba(182, 67, 50, 0.08);
+      color: var(--red);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      padding: 26px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      max-width: 12ch;
+    }
+
+    .hero-copy {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 72ch;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .meta-chip,
+    .pill,
+    .brand-chip,
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .meta-chip {
+      background: var(--panel);
+      border-color: var(--line);
+      color: var(--muted);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .focus-card {
+      background: linear-gradient(135deg, rgba(188, 95, 46, 0.1), rgba(255, 255, 255, 0.55));
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .focus-card h2,
+    .section-title h2,
+    .detail-card h2,
+    .timeline-card h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .focus-list,
+    .compact-list,
+    .clean-list,
+    .log-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+
+    .focus-list li,
+    .compact-list li,
+    .clean-list li,
+    .log-list li {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .view-tab,
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+      color: var(--text);
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .view-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff7f0;
+    }
+
+    .view-tab .badge {
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      font-size: 11px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 0.8fr 0.8fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .input,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px 16px;
+      background: var(--panel-strong);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .section,
+    .timeline-card {
+      padding: 20px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 42ch;
+    }
+
+    .result-count {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .opportunity-list,
+    .table-wrap {
+      max-height: 780px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .opportunity-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .opportunity-card:hover,
+    .opportunity-card.active {
+      transform: translateY(-1px);
+      border-color: rgba(188, 95, 46, 0.36);
+      box-shadow: 0 18px 35px rgba(109, 69, 31, 0.12);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .card-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .score-box {
+      min-width: 86px;
+      text-align: center;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(188, 95, 46, 0.14), rgba(255, 255, 255, 0.7));
+      border: 1px solid rgba(188, 95, 46, 0.18);
+      padding: 10px 12px;
+    }
+
+    .score-box strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .score-box span {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .opportunity-rows {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .metric-value {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .summary {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill,
+    .brand-chip,
+    .score-chip {
+      background: var(--panel-strong);
+      border-color: var(--line);
+    }
+
+    .pill.high { background: var(--red-soft); color: var(--red); border-color: rgba(182, 67, 50, 0.18); }
+    .pill.medium { background: var(--gold-soft); color: var(--gold); border-color: rgba(183, 121, 31, 0.22); }
+    .pill.low { background: var(--teal-soft); color: var(--teal); border-color: rgba(31, 122, 109, 0.18); }
+    .pill.stage-listed { background: rgba(117, 98, 82, 0.1); color: #6a5848; border-color: rgba(117, 98, 82, 0.16); }
+    .pill.stage-discussing,
+    .pill.stage-pending_schedule { background: var(--accent-soft); color: var(--accent); border-color: rgba(188, 95, 46, 0.18); }
+    .pill.stage-testing { background: var(--gold-soft); color: var(--gold); border-color: rgba(183, 121, 31, 0.18); }
+    .pill.stage-commercial_quote,
+    .pill.stage-partnered,
+    .pill.stage-regional_relation,
+    .pill.stage-unknown { background: rgba(117, 98, 82, 0.1); color: var(--muted); border-color: rgba(117, 98, 82, 0.14); }
+    .pill.stage-blocked { background: var(--red-soft); color: var(--red); border-color: rgba(182, 67, 50, 0.18); }
+
+    .score-chip.high { background: var(--red-soft); color: var(--red); }
+    .score-chip.medium { background: var(--gold-soft); color: var(--gold); }
+    .score-chip.low { background: var(--teal-soft); color: var(--teal); }
+
+    .brand-chip.compatible { background: rgba(31, 122, 109, 0.1); color: var(--teal); }
+    .brand-chip.testing { background: var(--gold-soft); color: var(--gold); }
+    .brand-chip.pending_schedule,
+    .brand-chip.discussing { background: var(--accent-soft); color: var(--accent); }
+    .brand-chip.unknown,
+    .brand-chip.incompatible { background: rgba(117, 98, 82, 0.1); color: var(--muted); }
+
+    .detail-card {
+      padding: 22px;
+      min-height: 100%;
+    }
+
+    .detail-empty {
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .detail-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .detail-head h2 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .detail-meta {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .detail-block {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .detail-block h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .detail-block p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--muted);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .link a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+
+    .log-item {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 14px 14px 14px 18px;
+      border-left: 3px solid rgba(188, 95, 46, 0.28);
+      background: rgba(255, 255, 255, 0.46);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .log-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .log-date {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .log-type {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .main-grid,
+      .timeline-grid,
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .stats,
+      .detail-grid,
+      .opportunity-rows {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 18px; }
+      h1 { font-size: 34px; }
+      .stats,
+      .detail-grid,
+      .opportunity-rows {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="source-info" id="sourceInfo">未加载 YAML</div>
+      <div class="file-loader">
+        <label for="yamlFileInput">加载 YAML 源文件</label>
+        <input type="file" id="yamlFileInput" accept=".yaml,.yml" />
+      </div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">PLM / PM Executive View</div>
+        <h1 id="datasetTitle">Growatt VPP Tracking</h1>
+        <div class="hero-copy" id="datasetMeta">
+          由 YAML SSOT 驱动，围绕 Growatt 主线推进、竞品格局、当前阶段、下一任务和全过程日志进行决策展示。
+        </div>
+        <div class="hero-meta" id="heroMeta"></div>
+        <div class="stats" id="stats"></div>
+      </div>
+      <div class="hero-side">
+        <div class="focus-card">
+          <h2>当前决策焦点</h2>
+          <ul class="focus-list" id="focusList"></ul>
+        </div>
+        <div class="focus-card">
+          <h2>下一步优先动作</h2>
+          <ul class="focus-list" id="nextActions"></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="main" onclick="switchView('main')">Growatt 主线 <span class="badge" id="mainBadge">0</span></button>
+      <button class="view-tab" data-view="competitor" onclick="switchView('competitor')">Competitor Analysis <span class="badge" id="competitorBadge">0</span></button>
+      <button class="view-tab" data-view="ledger" onclick="switchView('ledger')">全量台账 <span class="badge" id="ledgerBadge">0</span></button>
+    </div>
+
+    <div class="filters">
+      <input id="searchInput" class="input" placeholder="搜索平台、类别、日志、下一任务、标签" />
+      <select id="stageFilter"></select>
+      <select id="priorityFilter"></select>
+      <select id="matchingFilter"></select>
+    </div>
+
+    <div class="main-grid">
+      <section class="section">
+        <div class="section-title">
+          <div>
+            <h2 id="listTitle">Growatt 主线机会池</h2>
+            <div class="section-subtitle" id="listSubtitle">按照匹配度、Growatt 所处状态和优先级排序。</div>
+          </div>
+          <div class="result-count" id="resultCount"></div>
+        </div>
+        <div id="leftPane"></div>
+      </section>
+
+      <section id="detailPane"></section>
+    </div>
+
+    <div class="timeline-grid">
+      <section class="timeline-card">
+        <div class="section-title">
+          <div>
+            <h2>全过程日志追踪</h2>
+            <div class="section-subtitle">按时间倒序汇总所有平台日志，便于管理层快速扫描节奏变化。</div>
+          </div>
+        </div>
+        <div id="globalTimeline"></div>
+      </section>
+
+      <section class="timeline-card">
+        <div class="section-title">
+          <div>
+            <h2>阶段分布</h2>
+            <div class="section-subtitle">用于判断资源是否过多停留在研究/排期，而未进入测试或已兼容。</div>
+          </div>
+        </div>
+        <div id="stageLegend"></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      data: null,
+      records: [],
+      filtered: [],
+      selectedId: null,
+      currentView: "main",
+      currentYamlPath: null,
+    };
+
+    function safeArray(value) {
+      return Array.isArray(value) ? value : [];
+    }
+
+    function showError(message) {
+      const node = $("errorBox");
+      node.textContent = message;
+      node.style.display = "block";
+    }
+
+    function hideError() {
+      $("errorBox").style.display = "none";
+    }
+
+    function enumText(group, key, fallback = "-") {
+      return state.data?.enums?.[group]?.[key] || fallback;
+    }
+
+    function primaryBrand() {
+      return state.data?.dashboard?.primary_brand || "growatt";
+    }
+
+    function competitorBrands() {
+      const list = safeArray(state.data?.dashboard?.competitor_brands);
+      return list.length ? list : trackedBrands().filter((b) => b.key !== primaryBrand()).map((b) => b.key);
+    }
+
+    function trackedBrands() {
+      return safeArray(state.data?.brands?.tracked_brands);
+    }
+
+    function brandLabel(key) {
+      return trackedBrands().find((item) => item.key === key)?.display_name || key;
+    }
+
+    function renderGrowattStatus(value) {
+      const labelMap = {
+        compatible: "已兼容",
+        testing: "测试中",
+        pending_schedule: "待排期",
+        discussing: "沟通中",
+        unknown: "未进入",
+        incompatible: "未兼容",
+      };
+      return labelMap[value] || value || "未注明";
+    }
+
+    function renderCommonStatus(value) {
+      const labelMap = {
+        compatible: "兼容",
+        testing: "测试中",
+        pending_schedule: "待排期",
+        discussing: "沟通中",
+        unknown: "未知",
+        incompatible: "未兼容",
+      };
+      return labelMap[value] || value || "未注明";
+    }
+
+    function parseDate(input) {
+      if (!input) return 0;
+      return new Date(input).getTime() || 0;
+    }
+
+    function competitorCompatibleCount(record) {
+      return competitorBrands().filter((key) => record.compatibility?.[key] === "compatible").length;
+    }
+
+    function primaryStatusWeight(record) {
+      const value = record.compatibility?.[primaryBrand()];
+      const map = {
+        testing: 42,
+        pending_schedule: 37,
+        discussing: 34,
+        unknown: competitorCompatibleCount(record) > 0 ? 29 : 18,
+        compatible: 12,
+        incompatible: 6,
+      };
+      return map[value] || 0;
+    }
+
+    function priorityWeight(priority) {
+      return { high: 18, medium: 10, low: 4 }[priority] || 0;
+    }
+
+    function opportunityScore(record) {
+      return (record.analysis?.matching_score || 0) + primaryStatusWeight(record) + priorityWeight(record.priority);
+    }
+
+    function globalLogs(records) {
+      return records
+        .flatMap((record) =>
+          safeArray(record.progress?.log_entries).map((log) => ({
+            ...log,
+            partner_name: record.partner_name,
+            record_id: record.id,
+          }))
+        )
+        .sort((a, b) => parseDate(b.date) - parseDate(a.date));
+    }
+
+    function buildHero(records) {
+      const total = records.length;
+      const mainBrand = primaryBrand();
+      const growattWins = records.filter((r) => r.compatibility?.[mainBrand] === "compatible").length;
+      const inFlight = records.filter((r) => ["testing", "pending_schedule", "discussing"].includes(r.compatibility?.[mainBrand])).length;
+      const highGap = records.filter((r) => (r.analysis?.matching_score || 0) >= 80 && r.compatibility?.[mainBrand] !== "compatible").length;
+      const competitorLead = records.filter((r) => competitorCompatibleCount(r) >= 3 && r.compatibility?.[mainBrand] !== "compatible").length;
+
+      $("datasetTitle").textContent = `${brandLabel(mainBrand)} AU VPP Dashboard`;
+      $("datasetMeta").textContent = `SSOT: YAML。主线品牌为 ${brandLabel(mainBrand)}，其余品牌用于 competitor analysis。重点观察匹配度、当前阶段、下一任务和全过程日志。`;
+      $("heroMeta").innerHTML = [
+        `区域 ${state.data?.region || "-"}`,
+        `最后更新 ${state.data?.last_updated || "-"}`,
+        `排序依据 ${state.data?.dashboard?.ranking_metric || "analysis.matching_score"}`,
+      ].map((text) => `<span class="meta-chip">${text}</span>`).join("");
+
+      const stats = [
+        ["平台总数", total],
+        ["Growatt 已兼容", growattWins],
+        ["Growatt 推进中", inFlight],
+        ["高匹配缺口", highGap],
+        ["竞品领先平台", competitorLead],
+      ];
+
+      $("stats").innerHTML = stats.map(([label, value]) => `
+        <div class="stat">
+          <div class="stat-label">${label}</div>
+          <div class="stat-value">${value}</div>
+        </div>
+      `).join("");
+
+      const focus = [
+        `优先拿下匹配度 >= 80 且 Growatt 尚未兼容的平台。`,
+        `把“待排期 / 沟通中 / 测试中”的平台从信息确认推进到明确时间表。`,
+        `保留已兼容平台作为样板，但资源优先给高匹配缺口。`,
+      ];
+      $("focusList").innerHTML = focus.map((item) => `<li>${item}</li>`).join("");
+
+      const topActions = records
+        .filter((r) => r.compatibility?.[mainBrand] !== "compatible")
+        .sort((a, b) => opportunityScore(b) - opportunityScore(a))
+        .slice(0, 4);
+
+      $("nextActions").innerHTML = topActions.map((record) => {
+        const task = record.progress?.next_task?.task || record.progress?.next_action || "待补充";
+        return `<li><strong>${record.partner_name}</strong>：${task}</li>`;
+      }).join("");
+    }
+
+    function buildStageLegend(records) {
+      const counts = {};
+      records.forEach((record) => {
+        const stage = record.progress?.overall_stage || "unknown";
+        counts[stage] = (counts[stage] || 0) + 1;
+      });
+
+      const order = ["listed", "discussing", "pending_schedule", "testing", "commercial_quote", "partnered", "regional_relation", "blocked", "unknown"];
+      $("stageLegend").innerHTML = order
+        .filter((key) => counts[key] !== undefined)
+        .map((key) => `
+          <div class="opportunity-card" style="cursor:default; margin-bottom:10px;">
+            <div class="card-head" style="margin-bottom:0;">
+              <div>
+                <div class="pill stage-${key}">${enumText("integration_stage", key, key)}</div>
+              </div>
+              <div class="score-box" style="min-width:72px;">
+                <strong>${counts[key]}</strong>
+                <span>平台</span>
+              </div>
+            </div>
+          </div>
+        `).join("");
+    }
+
+    function populateFilters() {
+      const stageSel = $("stageFilter");
+      const prioritySel = $("priorityFilter");
+      const matchingSel = $("matchingFilter");
+
+      if (stageSel.dataset.init === "1") return;
+
+      stageSel.innerHTML = `<option value="">全部阶段</option>` +
+        Object.entries(state.data?.enums?.integration_stage || {}).map(([key, value]) => `<option value="${key}">${value}</option>`).join("");
+      prioritySel.innerHTML = `<option value="">全部优先级</option>` +
+        Object.entries(state.data?.enums?.priority_level || {}).map(([key, value]) => `<option value="${key}">${value}</option>`).join("");
+      matchingSel.innerHTML = `<option value="">全部匹配度</option>` +
+        Object.entries(state.data?.enums?.matching_band || {}).map(([key, value]) => `<option value="${key}">${value}</option>`).join("");
+
+      stageSel.dataset.init = "1";
+    }
+
+    function recordMatches(record, query, stage, priority, matchingBand) {
+      const text = [
+        record.partner_name,
+        record.category,
+        record.analysis?.matching_summary,
+        record.analysis?.growatt_position,
+        record.progress?.current_phase,
+        record.progress?.summary,
+        record.progress?.next_action,
+        record.progress?.next_task?.task,
+        record.progress?.next_task?.owner,
+        ...safeArray(record.analysis?.competitor_highlights),
+        ...safeArray(record.progress?.remarks),
+        ...safeArray(record.progress?.blockers),
+        ...safeArray(record.tags),
+        ...safeArray(record.progress?.log_entries).map((item) => `${item.summary} ${item.outcome}`),
+      ].join(" ").toLowerCase();
+
+      if (query && !text.includes(query)) return false;
+      if (stage && (record.progress?.overall_stage || "") !== stage) return false;
+      if (priority && (record.priority || "") !== priority) return false;
+      if (matchingBand && (record.analysis?.matching_band || "") !== matchingBand) return false;
+      return true;
+    }
+
+    function applyFilters() {
+      if (!state.data) return;
+      const records = safeArray(state.data.records);
+      const query = $("searchInput").value.trim().toLowerCase();
+      const stage = $("stageFilter").value;
+      const priority = $("priorityFilter").value;
+      const matchingBand = $("matchingFilter").value;
+
+      const filtered = records.filter((record) => recordMatches(record, query, stage, priority, matchingBand));
+      state.records = records;
+      state.filtered = filtered;
+
+      $("mainBadge").textContent = records.filter((r) => r.compatibility?.[primaryBrand()] !== "compatible").length;
+      $("competitorBadge").textContent = records.filter((r) => competitorCompatibleCount(r) > 0).length;
+      $("ledgerBadge").textContent = records.length;
+
+      buildHero(records);
+      buildStageLegend(records);
+      renderView();
+    }
+
+    function sortForMain(records) {
+      return [...records].sort((a, b) => opportunityScore(b) - opportunityScore(a));
+    }
+
+    function sortForCompetitor(records) {
+      return [...records].sort((a, b) => {
+        const gapDiff = competitorCompatibleCount(b) - competitorCompatibleCount(a);
+        if (gapDiff !== 0) return gapDiff;
+        return (b.analysis?.matching_score || 0) - (a.analysis?.matching_score || 0);
+      });
+    }
+
+    function sortForLedger(records) {
+      return [...records].sort((a, b) => {
+        const priorityDiff = priorityWeight(b.priority) - priorityWeight(a.priority);
+        if (priorityDiff !== 0) return priorityDiff;
+        return (b.analysis?.matching_score || 0) - (a.analysis?.matching_score || 0);
+      });
+    }
+
+    function switchView(view) {
+      state.currentView = view;
+      document.querySelectorAll(".view-tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === view);
+      });
+      renderView();
+    }
+
+    function ensureSelection(records) {
+      if (!records.some((record) => record.id === state.selectedId)) {
+        state.selectedId = records[0]?.id || null;
+      }
+    }
+
+    function renderView() {
+      const view = state.currentView;
+      let records = state.filtered;
+      let title = "";
+      let subtitle = "";
+
+      if (view === "main") {
+        records = sortForMain(records);
+        title = "Growatt 主线机会池";
+        subtitle = "优先显示 Growatt 未完成兼容的平台，并把已兼容样板放在后面。";
+      } else if (view === "competitor") {
+        records = sortForCompetitor(records);
+        title = "Competitor Analysis";
+        subtitle = "看哪些平台已经被竞品覆盖，而 Growatt 仍处于空白或推进中。";
+      } else {
+        records = sortForLedger(records);
+        title = "全量台账";
+        subtitle = "按优先级和匹配度浏览全部平台记录。";
+      }
+
+      ensureSelection(records);
+      $("listTitle").textContent = title;
+      $("listSubtitle").textContent = subtitle;
+      $("resultCount").textContent = `当前 ${records.length} / 总计 ${state.records.length}`;
+      renderLeftPane(records);
+      renderDetail(records.find((record) => record.id === state.selectedId));
+      renderGlobalTimeline(records);
+    }
+
+    function renderLeftPane(records) {
+      if (state.currentView === "main") {
+        renderMainList(records);
+      } else if (state.currentView === "competitor") {
+        renderCompetitorTable(records);
+      } else {
+        renderLedgerTable(records);
+      }
+    }
+
+    function statusClass(value) {
+      return value || "unknown";
+    }
+
+    function renderMainList(records) {
+      const mainBrand = primaryBrand();
+      const ordered = [
+        ...records.filter((record) => record.compatibility?.[mainBrand] !== "compatible"),
+        ...records.filter((record) => record.compatibility?.[mainBrand] === "compatible"),
+      ];
+
+      $("leftPane").innerHTML = `<div class="opportunity-list">${ordered.map((record) => `
+        <article class="opportunity-card ${record.id === state.selectedId ? "active" : ""}" data-id="${record.id}">
+          <div class="card-head">
+            <div>
+              <h3 class="card-title">${record.partner_name}</h3>
+              <div class="card-meta">${record.category || "-"} · ${enumText("priority_level", record.priority, record.priority)}</div>
+            </div>
+            <div class="score-box">
+              <strong>${record.analysis?.matching_score || 0}</strong>
+              <span>匹配度</span>
+            </div>
+          </div>
+
+          <div class="brand-row">
+            <span class="pill stage-${record.progress?.overall_stage || "unknown"}">${enumText("integration_stage", record.progress?.overall_stage, "未知")}</span>
+            <span class="score-chip ${record.analysis?.matching_band || "medium"}">${enumText("matching_band", record.analysis?.matching_band, "中匹配")}</span>
+            <span class="brand-chip ${statusClass(record.compatibility?.[mainBrand])}">${brandLabel(mainBrand)} ${renderGrowattStatus(record.compatibility?.[mainBrand])}</span>
+          </div>
+
+          <div class="opportunity-rows">
+            <div class="metric">
+              <div class="metric-label">当前阶段</div>
+              <div class="metric-value">${record.progress?.current_phase || record.progress?.summary || "-"}</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">下一任务</div>
+              <div class="metric-value">${record.progress?.next_task?.task || record.progress?.next_action || "-"}</div>
+            </div>
+          </div>
+
+          <div class="summary">${record.analysis?.matching_summary || "未填写匹配分析。"}</div>
+          <div class="brand-row">
+            ${safeArray(record.analysis?.competitor_highlights).slice(0, 2).map((item) => `<span class="meta-chip">${item}</span>`).join("")}
+          </div>
+        </article>
+      `).join("")}</div>`;
+
+      bindSelectableCards();
+    }
+
+    function renderCompetitorTable(records) {
+      const headers = competitorBrands().map((key) => `<th>${brandLabel(key)}</th>`).join("");
+      $("leftPane").innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>平台</th>
+                <th>匹配度</th>
+                <th>Growatt</th>
+                <th>竞品数</th>
+                ${headers}
+              </tr>
+            </thead>
+            <tbody>
+              ${records.map((record) => `
+                <tr data-id="${record.id}" style="cursor:pointer; background:${record.id === state.selectedId ? "rgba(188,95,46,0.08)" : "transparent"}">
+                  <td>
+                    <strong>${record.partner_name}</strong>
+                    <div class="card-meta">${record.category || "-"}</div>
+                  </td>
+                  <td>${record.analysis?.matching_score || 0}</td>
+                  <td>${renderGrowattStatus(record.compatibility?.[primaryBrand()])}</td>
+                  <td>${competitorCompatibleCount(record)}</td>
+                  ${competitorBrands().map((key) => `<td>${renderCommonStatus(record.compatibility?.[key])}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+      bindSelectableRows();
+    }
+
+    function renderLedgerTable(records) {
+      const brands = trackedBrands().map((item) => item.key);
+      $("leftPane").innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>平台</th>
+                <th>优先级</th>
+                <th>阶段</th>
+                <th>匹配度</th>
+                ${brands.map((key) => `<th>${brandLabel(key)}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              ${records.map((record) => `
+                <tr data-id="${record.id}" style="cursor:pointer; background:${record.id === state.selectedId ? "rgba(188,95,46,0.08)" : "transparent"}">
+                  <td>
+                    <strong>${record.partner_name}</strong>
+                    <div class="card-meta">${record.category || "-"}</div>
+                  </td>
+                  <td>${enumText("priority_level", record.priority, record.priority)}</td>
+                  <td>${enumText("integration_stage", record.progress?.overall_stage, "未知")}</td>
+                  <td>${record.analysis?.matching_score || 0}</td>
+                  ${brands.map((key) => `<td>${key === primaryBrand() ? renderGrowattStatus(record.compatibility?.[key]) : renderCommonStatus(record.compatibility?.[key])}</td>`).join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+      bindSelectableRows();
+    }
+
+    function bindSelectableCards() {
+      document.querySelectorAll(".opportunity-card[data-id]").forEach((node) => {
+        node.addEventListener("click", () => {
+          state.selectedId = node.dataset.id;
+          renderView();
+        });
+      });
+    }
+
+    function bindSelectableRows() {
+      document.querySelectorAll("tr[data-id]").forEach((node) => {
+        node.addEventListener("click", () => {
+          state.selectedId = node.dataset.id;
+          renderView();
+        });
+      });
+    }
+
+    function renderDetail(record) {
+      if (!record) {
+        $("detailPane").innerHTML = `<div class="detail-card"><div class="detail-empty">请选择一个平台</div></div>`;
+        return;
+      }
+
+      const platformUrl = record.links?.platform_url?.value;
+      const docUrl = record.links?.requirement_doc_url?.value;
+      const refs = safeArray(record.links?.reference_urls);
+      const remarks = safeArray(record.progress?.remarks);
+      const blockers = safeArray(record.progress?.blockers);
+      const logs = [...safeArray(record.progress?.log_entries)].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
+      $("detailPane").innerHTML = `
+        <div class="detail-card">
+          <div class="detail-head">
+            <div>
+              <h2>${record.partner_name}</h2>
+              <div class="detail-meta">ID: ${record.id} · ${record.country || "-"} · ${record.category || "-"} · ${enumText("priority_level", record.priority, record.priority)}</div>
+            </div>
+            <div class="score-box">
+              <strong>${record.analysis?.matching_score || 0}</strong>
+              <span>匹配度</span>
+            </div>
+          </div>
+
+          <div class="brand-row" style="margin-bottom:16px;">
+            <span class="pill stage-${record.progress?.overall_stage || "unknown"}">${enumText("integration_stage", record.progress?.overall_stage, "未知")}</span>
+            <span class="score-chip ${record.analysis?.matching_band || "medium"}">${enumText("matching_band", record.analysis?.matching_band, "中匹配")}</span>
+            <span class="brand-chip ${statusClass(record.compatibility?.[primaryBrand()])}">${brandLabel(primaryBrand())} ${renderGrowattStatus(record.compatibility?.[primaryBrand()])}</span>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h3>匹配判断</h3>
+              <p>${record.analysis?.matching_summary || "-"}</p>
+            </div>
+            <div class="detail-block">
+              <h3>Growatt 定位</h3>
+              <p>${record.analysis?.growatt_position || "-"}</p>
+            </div>
+            <div class="detail-block">
+              <h3>当前阶段</h3>
+              <p>${record.progress?.current_phase || record.progress?.summary || "-"}</p>
+            </div>
+            <div class="detail-block">
+              <h3>下一任务</h3>
+              <p>${record.progress?.next_task?.task || record.progress?.next_action || "-"}</p>
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h3>任务责任</h3>
+              <p>Owner: ${record.progress?.next_task?.owner || record.progress?.owner || "-"}</p>
+              <p style="margin-top:8px;">成功标准: ${record.progress?.next_task?.success_metric || "-"}</p>
+            </div>
+            <div class="detail-block">
+              <h3>竞品态势</h3>
+              <div class="brand-row">
+                ${competitorBrands().map((key) => `
+                  <span class="brand-chip ${statusClass(record.compatibility?.[key])}">
+                    ${brandLabel(key)} ${renderCommonStatus(record.compatibility?.[key])}
+                  </span>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h3>Competitor Highlights</h3>
+              ${safeArray(record.analysis?.competitor_highlights).length
+                ? `<ul class="clean-list">${safeArray(record.analysis?.competitor_highlights).map((item) => `<li>${item}</li>`).join("")}</ul>`
+                : `<p>-</p>`}
+            </div>
+            <div class="detail-block">
+              <h3>备注与阻塞</h3>
+              ${remarks.length ? `<ul class="clean-list">${remarks.map((item) => `<li>${item}</li>`).join("")}</ul>` : `<p>备注：无</p>`}
+              ${blockers.length ? `<ul class="clean-list">${blockers.map((item) => `<li>${item}</li>`).join("")}</ul>` : `<p style="margin-top:8px;">阻塞：无</p>`}
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-block">
+              <h3>商务信息</h3>
+              <p>报价说明：${record.commercial?.pricing_note || "无"}</p>
+              <p style="margin-top:8px;">商务备注：${record.commercial?.business_note || "无"}</p>
+            </div>
+            <div class="detail-block link">
+              <h3>链接</h3>
+              <p>平台链接：${platformUrl ? `<a href="${platformUrl}" target="_blank">${platformUrl}</a>` : "无"}</p>
+              <p style="margin-top:8px;">需求文档：${docUrl ? `<a href="${docUrl}" target="_blank">${docUrl}</a>` : "无"}</p>
+              <p style="margin-top:8px;">参考链接：${refs.length ? refs.map((url) => `<a href="${url}" target="_blank">${url}</a>`).join("；") : "无"}</p>
+            </div>
+          </div>
+
+          <div class="detail-block" style="margin-top:12px;">
+            <h3>平台过程日志</h3>
+            ${logs.length ? `
+              <ul class="log-list" style="padding-left:0;">
+                ${logs.map((item) => `
+                  <li class="log-item">
+                    <div class="log-top">
+                      <span class="log-date">${item.date || "-"}</span>
+                      <span class="log-type">${enumText("log_type", item.type, item.type || "日志")}</span>
+                    </div>
+                    <div><strong>${item.summary || "-"}</strong></div>
+                    <div class="detail-meta" style="margin-top:6px;">${item.outcome || "-"}</div>
+                  </li>
+                `).join("")}
+              </ul>
+            ` : `<p>暂无日志。</p>`}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGlobalTimeline(records) {
+      const logs = globalLogs(records).slice(0, 24);
+      $("globalTimeline").innerHTML = logs.length ? `
+        <ul class="log-list" style="padding-left:0; margin-top:0;">
+          ${logs.map((item) => `
+            <li class="log-item">
+              <div class="log-top">
+                <span class="log-date">${item.date || "-"}</span>
+                <span class="log-type">${item.partner_name} · ${enumText("log_type", item.type, item.type || "日志")}</span>
+              </div>
+              <div><strong>${item.summary || "-"}</strong></div>
+              <div class="detail-meta" style="margin-top:6px;">${item.outcome || "-"}</div>
+            </li>
+          `).join("")}
+        </ul>
+      ` : `<div class="detail-empty" style="min-height:240px;">暂无日志</div>`;
+    }
+
+    function loadData(parsed, sourceLabel) {
+      if (!parsed || !parsed.records) {
+        showError("无效的 YAML 格式：缺少 records 字段");
+        return;
+      }
+
+      hideError();
+      state.data = parsed;
+      state.currentYamlPath = sourceLabel;
+      $("sourceInfo").innerHTML = `当前源文件：<span class="path">${sourceLabel}</span>`;
+      populateFilters();
+      applyFilters();
+    }
+
+    async function loadYamlFile(file) {
+      try {
+        const text = await file.text();
+        loadData(jsyaml.load(text), file.name);
+      } catch (error) {
+        showError(`加载文件失败：${error.message}`);
+      }
+    }
+
+    function autoLoadYaml() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "data/au_vpp_partners.yaml", true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status === 200) {
+          try {
+            loadData(jsyaml.load(xhr.responseText), "data/au_vpp_partners.yaml");
+          } catch (error) {
+            showError(`自动加载失败：${error.message}`);
+          }
+        }
+      };
+      xhr.send();
+    }
+
+    $("yamlFileInput").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) loadYamlFile(file);
+    });
+    $("searchInput").addEventListener("input", applyFilters);
+    $("stageFilter").addEventListener("change", applyFilters);
+    $("priorityFilter").addEventListener("change", applyFilters);
+    $("matchingFilter").addEventListener("change", applyFilters);
+
+    autoLoadYaml();
+  </script>
+</body>
+</html>

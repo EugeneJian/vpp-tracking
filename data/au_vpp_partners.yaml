@@ -1,0 +1,810 @@
+# AU VPP 平台兼容性跟踪 - 主数据 YAML
+# 这是唯一事实源 (SSOT)，所有修改都应在此文件中进行
+
+schema_version: "1.1"
+dataset_id: "au_vpp_partners"
+dataset_name: "澳洲三方平台兼容性跟踪"
+region: "AU"
+currency: "AUD"
+last_updated: "2026-03-12"
+maintainer: ""
+description: "用于跟踪澳洲三方/VPP 平台与各逆变器、储能品牌的兼容、测试及商务推进情况。"
+
+dashboard:
+  primary_brand: "growatt"
+  competitor_brands:
+    - "sigen_energy"
+    - "foxess"
+    - "sungrow"
+    - "solax"
+    - "goodwe"
+    - "alpha"
+  ranking_metric: "analysis.matching_score"
+  decision_focus:
+    - "matching_score"
+    - "progress.overall_stage"
+    - "progress.current_phase"
+    - "progress.next_task"
+    - "progress.log_entries"
+  default_view: "growatt_main"
+
+enums:
+  compatibility_flag:
+    compatible: "兼容"
+    incompatible: "不兼容/未见兼容"
+    unknown: "未知"
+    testing: "测试中"
+    pending_schedule: "待排期"
+    discussing: "沟通中"
+  integration_stage:
+    listed: "已在对方清单"
+    testing: "测试中"
+    pending_schedule: "待排期"
+    discussing: "沟通中"
+    blocked: "受阻"
+    commercial_quote: "报价阶段"
+    partnered: "生态合作"
+    regional_relation: "区域关联"
+    unknown: "未知"
+  link_status:
+    valid: "有效"
+    partial: "截图截断/待补全"
+    none: "无"
+  priority_level:
+    high: "高"
+    medium: "中"
+    low: "低"
+    none: "未设置"
+  matching_band:
+    high: "高匹配"
+    medium: "中匹配"
+    low: "低匹配"
+  log_type:
+    research: "桌面研究"
+    outreach: "外部触达"
+    meeting: "会议/排期"
+    testing: "测试推进"
+    commercial: "商务推进"
+    note: "阶段备注"
+
+brands:
+  tracked_brands:
+    - key: "sigen_energy"
+      display_name: "Sigen Energy"
+      type: "primary"
+    - key: "foxess"
+      display_name: "FOXESS"
+      type: "primary"
+    - key: "sungrow"
+      display_name: "Sungrow"
+      type: "primary"
+    - key: "solax"
+      display_name: "SolaX"
+      type: "primary"
+    - key: "goodwe"
+      display_name: "Goodwe"
+      type: "primary"
+    - key: "alpha"
+      display_name: "Alpha"
+      type: "primary"
+    - key: "growatt"
+      display_name: "Growatt"
+      type: "primary_process_brand"
+
+records:
+  - id: "au-switch-din"
+    country: "澳洲"
+    partner_name: "Switch DIN"
+    category: "VPP / Aggregator"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "unknown"
+      foxess: "unknown"
+      sungrow: "compatible"
+      solax: "compatible"
+      goodwe: "compatible"
+      alpha: "compatible"
+      growatt: "compatible"
+
+    other_brands:
+      - "Solaredge"
+
+    analysis:
+      matching_score: 74
+      matching_band: "medium"
+      matching_summary: "Growatt 已在兼容面内，可作为已拿下平台案例；但对新品导入和商务增量的拉动有限。"
+      competitor_highlights:
+        - "Sungrow / SolaX / Goodwe / Alpha 已兼容"
+        - "Growatt 已具备进入条件，适合作为已完成样板"
+      growatt_position: "已兼容，可作为存量案例维护"
+
+    progress:
+      overall_stage: "listed"
+      current_phase: "兼容已确认，暂无新增推进动作"
+      summary: "Growatt 已兼容，当前以存量维护为主。"
+      remarks:
+        - "平台链接仍为截断状态，后续建议补全。"
+      blockers: []
+      next_action: "补全平台资料，沉淀为 Growatt 参考案例。"
+      next_task:
+        task: "补全 Switch DIN 官方兼容页面并确认是否可对外引用"
+        owner: "内部产品运营"
+        due_date: ""
+        success_metric: "获得完整链接并确认案例可复用"
+      log_entries:
+        - date: "2026-03-12"
+          type: "research"
+          summary: "复核 Switch DIN 兼容清单"
+          outcome: "确认 Growatt 已在兼容面内"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://support.switchdin.com/hc/en-"
+        status: "partial"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "Growatt 已兼容"
+
+  - id: "au-covau"
+    country: "澳洲"
+    partner_name: "CovaU"
+    category: "Retailer / VPP"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "unknown"
+      foxess: "compatible"
+      sungrow: "unknown"
+      solax: "unknown"
+      goodwe: "unknown"
+      alpha: "compatible"
+      growatt: "compatible"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 73
+      matching_band: "medium"
+      matching_summary: "Growatt 已兼容，但竞品覆盖面不算广，价值偏验证型，不是当前主攻资源位。"
+      competitor_highlights:
+        - "FOXESS / Alpha 已兼容"
+        - "Growatt 已兼容，可作为轻量参考样板"
+      growatt_position: "已兼容，后续以运营维护为主"
+
+    progress:
+      overall_stage: "listed"
+      current_phase: "兼容已确认，尚未展开深度商务动作"
+      summary: "Growatt 已兼容，适合保留在参考清单中。"
+      remarks:
+        - "平台链接为截断状态，建议后续补全。"
+      blockers: []
+      next_action: "补充完整兼容证据，确认是否有业务放量空间。"
+      next_task:
+        task: "确认 CovaU 对 Growatt 的具体接入范围和对外说法"
+        owner: "内部产品运营"
+        due_date: ""
+        success_metric: "形成可复用的兼容说明"
+      log_entries:
+        - date: "2026-03-12"
+          type: "research"
+          summary: "复核 CovaU 兼容名单"
+          outcome: "确认 Growatt 已兼容"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.covau.com.au/docs/vpp/how-do-i-know-if-my-"
+        status: "partial"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "Growatt 已兼容"
+
+  - id: "au-evergen"
+    country: "澳洲"
+    partner_name: "Evergen"
+    category: "VPP / EMS"
+    priority: "high"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "compatible"
+      sungrow: "compatible"
+      solax: "compatible"
+      goodwe: "compatible"
+      alpha: "compatible"
+      growatt: "unknown"
+
+    other_brands:
+      - "Anker"
+      - "Deye"
+      - "Solaredge"
+
+    analysis:
+      matching_score: 92
+      matching_band: "high"
+      matching_summary: "典型高价值缺口平台。竞品覆盖完整，但 Growatt 尚未进入，适合作为主战场优先突破。"
+      competitor_highlights:
+        - "六个主竞品品牌均已兼容"
+        - "属于最明显的 Growatt 覆盖缺口"
+      growatt_position: "高优先级补位目标"
+
+    progress:
+      overall_stage: "listed"
+      current_phase: "停留在外部兼容清单观察阶段"
+      summary: "Evergen 已形成广泛竞品兼容，Growatt 尚未进入正式推进。"
+      remarks:
+        - "OEM requirement 文档链接为截断状态，建议补全。"
+      blockers: []
+      next_action: "发起对接，确认 Growatt 进入兼容/测试的门槛。"
+      next_task:
+        task: "获取 Evergen 技术接口和认证流程，启动首次对接"
+        owner: "Growatt BD + 产品"
+        due_date: ""
+        success_metric: "明确接入门槛、所需资料和测试路径"
+      log_entries:
+        - date: "2026-03-12"
+          type: "research"
+          summary: "复核 Evergen integrated partners 清单"
+          outcome: "确认六大主竞品均已兼容，Growatt 仍为空白"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://evergen.energy/integrated-partners/"
+        status: "valid"
+      requirement_doc_url:
+        value: "https://evergen-public.notion.site/OEM-"
+        status: "partial"
+      reference_urls: []
+
+    tags:
+      - "重点平台"
+      - "竞品领先"
+      - "Growatt 缺口"
+
+  - id: "au-amber"
+    country: "澳洲"
+    partner_name: "Amber"
+    category: "Retailer / VPP"
+    priority: "high"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "compatible"
+      sungrow: "compatible"
+      solax: "incompatible"
+      goodwe: "incompatible"
+      alpha: "compatible"
+      growatt: "testing"
+
+    other_brands:
+      - "Solaredge"
+      - "Anker"
+
+    analysis:
+      matching_score: 88
+      matching_band: "high"
+      matching_summary: "Growatt 已进入测试前后阶段，平台价值高、反馈链路清晰，属于近期最应推进落地的平台之一。"
+      competitor_highlights:
+        - "Sigen / FOXESS / Sungrow / Alpha 已兼容"
+        - "Growatt 已从空白进入测试推进"
+      growatt_position: "在途重点项目"
+
+    progress:
+      overall_stage: "discussing"
+      current_phase: "等待 Amber 技术接口人回复并进入技术对接"
+      summary: "已发送 API 文档，等待技术对接。"
+      remarks:
+        - "已完成统一 API 文档投递。"
+        - "下一步取决于 Amber 回复节奏。"
+      blockers: []
+      next_action: "等待 Amber 回复并安排技术评审。"
+      next_task:
+        task: "Amber 确认接口对接窗口并安排技术评审会议"
+        owner: "Growatt BD + Amber"
+        due_date: ""
+        success_metric: "确认 kick-off 时间和技术接口范围"
+      log_entries:
+        - date: "2026-03-06"
+          type: "outreach"
+          summary: "发送统一 API 文档"
+          outcome: "进入技术对接等待阶段"
+        - date: "2026-03-12"
+          type: "note"
+          summary: "复核 Amber 当前推进状态"
+          outcome: "维持高优先级，等待对方技术回复"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.amber.com.au/smartshift-compatibility-checker"
+        status: "valid"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "重点推进"
+      - "Growatt 主线"
+
+  - id: "au-origin"
+    country: "澳洲"
+    partner_name: "Origin"
+    category: "Retailer / VPP"
+    priority: "high"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "compatible"
+      solax: "compatible"
+      goodwe: "compatible"
+      alpha: "compatible"
+      growatt: "pending_schedule"
+
+    other_brands:
+      - "Solaredge"
+      - "Anker"
+
+    analysis:
+      matching_score: 86
+      matching_band: "high"
+      matching_summary: "Origin 对 Growatt 已有明确排期意向，且多竞品已兼容，适合作为高层资源协调的重点机会。"
+      competitor_highlights:
+        - "Sigen / Sungrow / SolaX / Goodwe / Alpha 已兼容"
+        - "Growatt 已进入排期等待"
+      growatt_position: "高价值待排期机会"
+
+    progress:
+      overall_stage: "discussing"
+      current_phase: "等待三方 kick-off meeting 排期确认"
+      summary: "已发送 API 文档，等待三方 kick-off 会议。"
+      remarks:
+        - "已完成统一 API 文档投递。"
+        - "当前关键动作是把会议排起来。"
+      blockers: []
+      next_action: "推动三方 kick-off 会议确定时间。"
+      next_task:
+        task: "锁定三方 kick-off 时间并确认参会角色"
+        owner: "Growatt BD"
+        due_date: ""
+        success_metric: "会议落档并进入接口评审"
+      log_entries:
+        - date: "2026-03-06"
+          type: "outreach"
+          summary: "发送统一 API 文档"
+          outcome: "Origin 表达进入 kick-off 排期意向"
+        - date: "2026-03-12"
+          type: "meeting"
+          summary: "跟进三方 kick-off 进展"
+          outcome: "仍待对方确认时间窗口"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.originenergy.com.au/solar/battery-plans/lite/#tinverter"
+        status: "valid"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "重点推进"
+      - "Growatt 主线"
+
+  - id: "au-globird"
+    country: "澳洲"
+    partner_name: "Globird"
+    category: "Retailer / VPP"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "compatible"
+      solax: "compatible"
+      goodwe: "unknown"
+      alpha: "compatible"
+      growatt: "unknown"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 80
+      matching_band: "high"
+      matching_summary: "平台价值和可推进性都不错，缺点是 Growatt 仍未明确进入，且测试环境和样本池准备成本较高。"
+      competitor_highlights:
+        - "Sigen / Sungrow / SolaX / Alpha 已兼容"
+        - "Growatt 尚未形成公开兼容"
+      growatt_position: "可推进但需准备测试资源"
+
+    progress:
+      overall_stage: "discussing"
+      current_phase: "等待测试环境和接入样本准备"
+      summary: "已发送 API 文档，准备测试环境。"
+      remarks:
+        - "需要准备 100 个客户接入 poll。"
+        - "测试环境准备是当前关键依赖。"
+      blockers: []
+      next_action: "准备 100 个客户接入 poll 和测试环境。"
+      next_task:
+        task: "组织 100 个客户接入样本并搭建测试环境"
+        owner: "Growatt 产品 + 测试"
+        due_date: ""
+        success_metric: "测试环境 ready，样本池满足接入条件"
+      log_entries:
+        - date: "2026-03-06"
+          type: "outreach"
+          summary: "发送统一 API 文档"
+          outcome: "进入测试资源准备阶段"
+        - date: "2026-03-12"
+          type: "testing"
+          summary: "复核 Globird 接入前置条件"
+          outcome: "确认需要 100 个客户样本和测试环境"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.globirdenergy.com.au/join-vpp/"
+        status: "valid"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "Growatt 主线"
+      - "资源依赖"
+
+  - id: "au-shinehub"
+    country: "澳洲"
+    partner_name: "ShineHub"
+    category: "渠道 / 聚合信息"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "unknown"
+      solax: "unknown"
+      goodwe: "unknown"
+      alpha: "unknown"
+      growatt: "unknown"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 58
+      matching_band: "medium"
+      matching_summary: "ShineHub 更偏商务渠道入口，不是典型 VPP 主平台。对 Growatt 的价值更多在商业导入而非技术卡位。"
+      competitor_highlights:
+        - "Sigen Energy 已具备合作信息"
+        - "当前更偏报价和商务判断"
+      growatt_position: "商业机会评估中"
+
+    progress:
+      overall_stage: "commercial_quote"
+      current_phase: "报价评估阶段"
+      summary: "商务报价阶段。"
+      remarks: []
+      blockers: []
+      next_action: "评估报价 ROI，决定是否继续投入。"
+      next_task:
+        task: "评估报价投入产出并确认是否进入采购/商务谈判"
+        owner: "Growatt 商务"
+        due_date: ""
+        success_metric: "形成 go / no-go 结论"
+      log_entries:
+        - date: "2026-03-12"
+          type: "commercial"
+          summary: "整理 ShineHub 报价方案"
+          outcome: "进入 ROI 评估"
+      owner: ""
+
+    commercial:
+      pricing_note: "5万澳币一个机型，超过四个机型，每4万澳币"
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.solarquotes.com.au/battery-storage/vpp-comparison/"
+        status: "valid"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "商务评估"
+
+  - id: "au-agl"
+    country: "澳洲"
+    partner_name: "AGL"
+    category: "Retailer / VPP"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "compatible"
+      solax: "unknown"
+      goodwe: "unknown"
+      alpha: "compatible"
+      growatt: "unknown"
+
+    other_brands:
+      - "Solaredge"
+
+    analysis:
+      matching_score: 69
+      matching_band: "medium"
+      matching_summary: "AGL 平台影响力不错，但当前 Growatt 信号不强，且公开证据不完整，更适合作为次级机会持续观察。"
+      competitor_highlights:
+        - "Sigen / Sungrow / Alpha 已兼容"
+        - "Growatt 尚无明确信号"
+      growatt_position: "次级观察机会"
+
+    progress:
+      overall_stage: "listed"
+      current_phase: "停留在公开清单监测阶段"
+      summary: "已有部分竞品兼容信息，Growatt 尚未进入推进。"
+      remarks:
+        - "平台链接仍为截断状态。"
+      blockers: []
+      next_action: "补齐信息并判断是否值得主动触达。"
+      next_task:
+        task: "补齐 AGL 平台资料并评估主动 BD 必要性"
+        owner: "内部产品运营"
+        due_date: ""
+        success_metric: "形成是否主动推进的判断"
+      log_entries:
+        - date: "2026-03-12"
+          type: "research"
+          summary: "复核 AGL 公开兼容页面"
+          outcome: "确认 Growatt 仍无公开兼容信息"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: "https://www.agl.com.au/residential/solar-and-"
+        status: "partial"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags: []
+
+  - id: "au-manta"
+    country: "澳洲"
+    partner_name: "Manta"
+    category: "VPP / Platform"
+    priority: "medium"
+
+    compatibility:
+      sigen_energy: "unknown"
+      foxess: "unknown"
+      sungrow: "unknown"
+      solax: "unknown"
+      goodwe: "compatible"
+      alpha: "unknown"
+      growatt: "discussing"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 76
+      matching_band: "high"
+      matching_summary: "Manta 当前虽公开兼容信息少，但 Growatt 已进入沟通，且平台背景值得持续推进。"
+      competitor_highlights:
+        - "已知 Goodwe 兼容"
+        - "Growatt 已进入直接沟通状态"
+      growatt_position: "探索型在途机会"
+
+    progress:
+      overall_stage: "discussing"
+      current_phase: "等待下周会议确认真实接入路径"
+      summary: "沟通推进中。"
+      remarks:
+        - "官网没有完整兼容清单。"
+        - "Manta 属于 OSW 旗下子公司。"
+        - "已预约下周开会。"
+      blockers: []
+      next_action: "完成下周会议并确认接入路径。"
+      next_task:
+        task: "完成与 Manta 的下周会议并确认产品、接口和测试需求"
+        owner: "Growatt BD + 产品"
+        due_date: ""
+        success_metric: "拿到明确接入路径和责任人"
+      log_entries:
+        - date: "2026-03-12"
+          type: "meeting"
+          summary: "确认与 Manta 下周会议安排"
+          outcome: "Growatt 保持沟通中状态"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: ""
+        status: "none"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "Growatt 主线"
+      - "会议待执行"
+
+  - id: "au-future-x-power"
+    country: "澳洲"
+    partner_name: "Future X Power"
+    category: "合作生态"
+    priority: "low"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "unknown"
+      solax: "unknown"
+      goodwe: "unknown"
+      alpha: "unknown"
+      growatt: "unknown"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 35
+      matching_band: "low"
+      matching_summary: "更偏生态关系映射，不是 Growatt 当前主线 VPP 平台。"
+      competitor_highlights:
+        - "与 Amber 存在合作关系"
+      growatt_position: "生态观察项"
+
+    progress:
+      overall_stage: "partnered"
+      current_phase: "生态关系记录"
+      summary: "生态合作关系。"
+      remarks:
+        - "该第三方与 Amber 合作。"
+      blockers: []
+      next_action: "仅在 Amber 主线需要时引用。"
+      next_task:
+        task: "保持生态关系备注，不单独投入推进"
+        owner: "内部产品运营"
+        due_date: ""
+        success_metric: "作为 Amber 生态背景信息可引用"
+      log_entries:
+        - date: "2026-03-12"
+          type: "note"
+          summary: "记录 Future X Power 与 Amber 的生态关系"
+          outcome: "保留为背景信息"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: ""
+        status: "none"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "生态背景"
+
+  - id: "au-ecotricity"
+    country: "澳洲"
+    partner_name: "Ecotricity"
+    category: "区域合作"
+    priority: "low"
+
+    compatibility:
+      sigen_energy: "compatible"
+      foxess: "unknown"
+      sungrow: "unknown"
+      solax: "unknown"
+      goodwe: "unknown"
+      alpha: "unknown"
+      growatt: "unknown"
+
+    other_brands: []
+
+    analysis:
+      matching_score: 28
+      matching_band: "low"
+      matching_summary: "偏区域关联线索，不构成 Growatt 当前澳洲主线推进对象。"
+      competitor_highlights:
+        - "与 Amber 存在区域运营关联说明"
+      growatt_position: "低优先级背景信息"
+
+    progress:
+      overall_stage: "regional_relation"
+      current_phase: "区域关联备注"
+      summary: "区域运营关联。"
+      remarks:
+        - "该第三方主要在新西兰运营，与 Amber 有关联说明。"
+      blockers: []
+      next_action: "作为区域背景信息保留。"
+      next_task:
+        task: "继续保持关联记录，无需单独推进"
+        owner: "内部产品运营"
+        due_date: ""
+        success_metric: "为区域分析提供背景"
+      log_entries:
+        - date: "2026-03-12"
+          type: "note"
+          summary: "记录 Ecotricity 区域关系信息"
+          outcome: "保留为区域背景线索"
+      owner: ""
+
+    commercial:
+      pricing_note: ""
+      business_note: ""
+
+    links:
+      platform_url:
+        value: ""
+        status: "none"
+      requirement_doc_url:
+        value: ""
+        status: "none"
+      reference_urls: []
+
+    tags:
+      - "区域背景"
+
+metadata:
+  notes:
+    - "本文件为唯一主数据源。"
+    - "Markdown、表格、周报、dashboard 均应由本 YAML 自动生成。"
+    - "Growatt 为主线品牌，其他品牌用于 competitor analysis。"
+    - "所有推进动作建议使用 progress.log_entries 进行全过程日志追踪。"
