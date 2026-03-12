@@ -314,27 +314,27 @@ records:
 
     progress:
       overall_stage: "discussing"
-      current_phase: "等待 Amber 技术接口人回复并进入技术对接"
-      summary: "已发送 API 文档，等待技术对接。"
+      current_phase: "已约 2026-03-16 16:00-16:30 技术交流"
+      summary: "Amber 已回复，计划于 2026-03-16 16:00-16:30 进行技术交流。"
       remarks:
         - "已完成统一 API 文档投递。"
-        - "下一步取决于 Amber 回复节奏。"
+        - "Amber 于 2026-03-12 回复并确认下周一下午技术交流。"
       blockers: []
-      next_action: "等待 Amber 回复并安排技术评审。"
+      next_action: "完成 2026-03-16 技术交流并确认接口人、评审范围和后续测试安排。"
       next_task:
-        task: "Amber 确认接口对接窗口并安排技术评审会议"
+        task: "完成与 Amber 的 2026-03-16 16:00-16:30 技术交流并确认对接范围"
         owner: "Growatt BD + Amber"
-        due_date: ""
-        success_metric: "确认 kick-off 时间和技术接口范围"
+        due_date: "2026-03-16"
+        success_metric: "完成技术交流并明确接口人、技术范围和下一步测试安排"
       log_entries:
         - date: "2026-03-06"
           type: "outreach"
           summary: "发送统一 API 文档"
           outcome: "进入技术对接等待阶段"
         - date: "2026-03-12"
-          type: "note"
-          summary: "复核 Amber 当前推进状态"
-          outcome: "维持高优先级，等待对方技术回复"
+          type: "meeting"
+          summary: "Amber 回复并确认 2026-03-16 16:00-16:30 技术交流"
+          outcome: "已从等待回复进入已约技术交流阶段"
       owner: ""
 
     commercial:
@@ -581,23 +581,24 @@ records:
       growatt_position: "次级观察机会"
 
     progress:
-      overall_stage: "listed"
-      current_phase: "停留在公开清单监测阶段"
-      summary: "已有部分竞品兼容信息，Growatt 尚未进入推进。"
+      overall_stage: "discussing"
+      current_phase: "已约 2026-03-16 12:00-12:30 面对面交流"
+      summary: "AGL 已于 2026-03-12 回复，确认 2026-03-16 12:00-12:30 面对面交流。"
       remarks:
         - "平台链接仍为截断状态。"
+        - "AGL 已从公开清单观察进入直接沟通阶段。"
       blockers: []
-      next_action: "补齐信息并判断是否值得主动触达。"
+      next_action: "完成 2026-03-16 面对面交流并确认后续技术或商务推进路径。"
       next_task:
-        task: "补齐 AGL 平台资料并评估主动 BD 必要性"
-        owner: "内部产品运营"
-        due_date: ""
-        success_metric: "形成是否主动推进的判断"
+        task: "完成与 AGL 的 2026-03-16 12:00-12:30 面对面交流并确认下一步动作"
+        owner: "Growatt BD + AGL"
+        due_date: "2026-03-16"
+        success_metric: "完成面对面交流并拿到明确的后续对接方向"
       log_entries:
         - date: "2026-03-12"
-          type: "research"
-          summary: "复核 AGL 公开兼容页面"
-          outcome: "确认 Growatt 仍无公开兼容信息"
+          type: "meeting"
+          summary: "AGL 回复并确认 2026-03-16 12:00-12:30 面对面交流"
+          outcome: "已从公开观察进入已约会议阶段"
       owner: ""
 
     commercial:
