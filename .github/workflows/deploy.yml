@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+env:
+  CLOUDFLARE_PAGES_PROJECT: vpp-tracking
+  WRANGLER_VERSION: 4.72.0
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,12 +22,59 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+
+      - name: Install Wrangler
+        run: npm install --global wrangler@${WRANGLER_VERSION}
+
+      - name: Validate Cloudflare token
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: wrangler whoami
+
+      - name: Validate Pages project
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          RESPONSE_FILE="$(mktemp)"
+          STATUS_CODE="$(
+            curl --silent --show-error \
+            --output "${RESPONSE_FILE}" \
+            --write-out "%{http_code}" \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/pages/projects/${CLOUDFLARE_PAGES_PROJECT}" \
+          )"
+
+          node -e '
+            const fs = require("fs");
+            const path = process.argv[1];
+            const project = process.argv[2];
+            const statusCode = Number(process.argv[3]);
+            const raw = fs.readFileSync(path, "utf8");
+            let payload;
+            try {
+              payload = JSON.parse(raw);
+            } catch (error) {
+              console.error(`Pages project validation failed for ${project}: HTTP ${statusCode}, non-JSON response.`);
+              console.error(raw);
+              process.exit(1);
+            }
+            if (statusCode >= 400 || !payload.success) {
+              const msg = (payload.errors || []).map((e) => e.message).join("; ") || "Unknown Cloudflare API error";
+              console.error(`Pages project validation failed for ${project}: HTTP ${statusCode}, ${msg}`);
+              process.exit(1);
+            }
+            const name = payload.result && payload.result.name;
+            if (name !== project) {
+              console.error(`Pages project validation returned ${name || "no project name"}, expected ${project}.`);
+              process.exit(1);
+            }
+            console.log(`Validated Pages project: ${name}`);
+          ' "${RESPONSE_FILE}" "${CLOUDFLARE_PAGES_PROJECT}" "${STATUS_CODE}"
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: "4.72.0"
-          command: pages deploy . --project-name=vpp-tracking
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: wrangler pages deploy . --project-name=${CLOUDFLARE_PAGES_PROJECT}
