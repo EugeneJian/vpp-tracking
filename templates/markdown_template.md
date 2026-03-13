@@ -6,7 +6,7 @@
 > 主线品牌：{{ brands.tracked_brands | selectattr("key", "equalto", dashboard.primary_brand) | map(attribute="display_name") | first }}
 > 说明：本文档由 YAML 自动生成，请勿作为主数据直接维护。
 
-<div class="card">
+<div class="card" markdown="1">
 
 ## 1. PM / PLM 总览
 
@@ -18,7 +18,7 @@
 
 </div>
 
-<div class="card">
+<div class="card" markdown="1">
 
 ## 2. Competitor Analysis
 
@@ -33,7 +33,7 @@
 ## 3. 平台详情
 
 {% for r in records %}
-<div class="card">
+<div class="card" markdown="1">
 
 ### {{ r.partner_name }}
 
@@ -71,13 +71,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | {{ r.compatibility.sigen_energy }} |
-| FOXESS | {{ r.compatibility.foxess }} |
-| Sungrow | {{ r.compatibility.sungrow }} |
-| SolaX | {{ r.compatibility.solax }} |
-| Goodwe | {{ r.compatibility.goodwe }} |
-| Alpha | {{ r.compatibility.alpha }} |
-| Growatt | {{ r.compatibility.growatt }} |
+| Sigen Energy | {{ r.compatibility.sigen_energy | render_detail_compatibility }} |
+| FOXESS | {{ r.compatibility.foxess | render_detail_compatibility }} |
+| Sungrow | {{ r.compatibility.sungrow | render_detail_compatibility }} |
+| SolaX | {{ r.compatibility.solax | render_detail_compatibility }} |
+| Goodwe | {{ r.compatibility.goodwe | render_detail_compatibility }} |
+| Alpha | {{ r.compatibility.alpha | render_detail_compatibility }} |
+| Growatt | {{ r.compatibility.growatt | render_detail_process_compatibility }} |
 
 {% if r.other_brands and r.other_brands | length > 0 %}
 **其他品牌**: {{ r.other_brands | join("、") }}

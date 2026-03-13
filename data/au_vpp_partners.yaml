@@ -6,7 +6,7 @@ dataset_id: "au_vpp_partners"
 dataset_name: "澳洲三方平台兼容性跟踪"
 region: "AU"
 currency: "AUD"
-last_updated: "2026-03-12"
+last_updated: "2026-03-13"
 maintainer: ""
 description: "用于跟踪澳洲三方/VPP 平台与各逆变器、储能品牌的兼容、测试及商务推进情况。"
 
@@ -230,7 +230,7 @@ records:
       solax: "compatible"
       goodwe: "compatible"
       alpha: "compatible"
-      growatt: "unknown"
+      growatt: "compatible"
 
     other_brands:
       - "Anker"
@@ -240,30 +240,31 @@ records:
     analysis:
       matching_score: 92
       matching_band: "high"
-      matching_summary: "典型高价值缺口平台。竞品覆盖完整，但 Growatt 尚未进入，适合作为主战场优先突破。"
+      matching_summary: "Evergen 已确认兼容 Growatt，且竞品覆盖完整，是澳洲市场里很有代表性的高价值兼容案例。"
       competitor_highlights:
         - "六个主竞品品牌均已兼容"
-        - "属于最明显的 Growatt 覆盖缺口"
-      growatt_position: "高优先级补位目标"
+        - "Growatt 已补齐兼容覆盖，可作为重点参考案例"
+      growatt_position: "已兼容重点案例"
 
     progress:
       overall_stage: "listed"
-      current_phase: "停留在外部兼容清单观察阶段"
-      summary: "Evergen 已形成广泛竞品兼容，Growatt 尚未进入正式推进。"
+      current_phase: "兼容已确认，可转入案例沉淀"
+      summary: "Evergen 官方 Growatt 集成页已可访问，Growatt 已进入兼容名单。"
       remarks:
-        - "OEM requirement 文档链接为截断状态，建议补全。"
+        - "Evergen 官方已提供 Growatt 独立集成页。"
+        - "OEM requirement 文档链接仍为截断状态，建议后续补全。"
       blockers: []
-      next_action: "发起对接，确认 Growatt 进入兼容/测试的门槛。"
+      next_action: "沉淀 Evergen × Growatt 兼容证据，并确认可对外引用的案例表述。"
       next_task:
-        task: "获取 Evergen 技术接口和认证流程，启动首次对接"
-        owner: "Growatt BD + 产品"
+        task: "补充 Evergen 官方 Growatt 兼容证据并整理为可复用案例"
+        owner: "内部产品运营"
         due_date: ""
-        success_metric: "明确接入门槛、所需资料和测试路径"
+        success_metric: "形成可对内对外复用的兼容说明和引用链接"
       log_entries:
-        - date: "2026-03-12"
+        - date: "2026-03-13"
           type: "research"
-          summary: "复核 Evergen integrated partners 清单"
-          outcome: "确认六大主竞品均已兼容，Growatt 仍为空白"
+          summary: "复核 Evergen Growatt 官方集成页"
+          outcome: "确认 Growatt 已兼容并具备独立官方页面"
       owner: ""
 
     commercial:
@@ -277,12 +278,13 @@ records:
       requirement_doc_url:
         value: "https://evergen-public.notion.site/OEM-"
         status: "partial"
-      reference_urls: []
+      reference_urls:
+        - "https://evergen.energy/integrated-partners/growatt/"
 
     tags:
       - "重点平台"
       - "竞品领先"
-      - "Growatt 缺口"
+      - "Growatt 已兼容"
 
   - id: "au-amber"
     country: "澳洲"

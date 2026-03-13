@@ -9,7 +9,7 @@ AU VPP 平台兼容性跟踪 - 生成脚本
 
 import os
 import yaml
-from jinja2 import Environment, FileSystemLoader, pass_eval_context
+from jinja2 import Environment, FileSystemLoader
 import markdown
 
 
@@ -41,6 +41,61 @@ def render_process_compatibility(value):
     return render_map.get(value, '')
 
 
+def render_detail_compatibility(value):
+    """渲染详情中的普通品牌兼容状态"""
+    render_map = {
+        'compatible': '兼容',
+        'incompatible': '未兼容',
+        'unknown': '未知',
+        'testing': '测试中',
+        'pending_schedule': '待排期',
+        'discussing': '沟通中'
+    }
+    return render_map.get(value, value or '-')
+
+
+def render_detail_process_compatibility(value):
+    """渲染详情中的过程态品牌兼容状态"""
+    return render_detail_compatibility(value)
+
+
+def _render_status_icon(value):
+    """渲染 HTML 状态图标"""
+    icon_map = {
+        'compatible': ('✓', 'status-compatible', '兼容'),
+        'incompatible': ('×', 'status-incompatible', '未兼容'),
+        'unknown': ('○', 'status-unknown', '未知'),
+        'testing': ('◐', 'status-testing', '测试中'),
+        'pending_schedule': ('◷', 'status-pending', '待排期'),
+        'discussing': ('◎', 'status-discussing', '沟通中')
+    }
+    icon, css_class, label = icon_map.get(value, ('○', 'status-unknown', value or '未知'))
+    return (
+        f'<span class="status-icon {css_class}" title="{label}" aria-label="{label}">'
+        f'{icon}</span>'
+    )
+
+
+def render_compatibility_html(value):
+    """渲染 HTML 中的普通品牌兼容状态图标"""
+    return _render_status_icon(value)
+
+
+def render_process_compatibility_html(value):
+    """渲染 HTML 中的过程态品牌兼容状态图标"""
+    return _render_status_icon(value)
+
+
+def render_detail_compatibility_html(value):
+    """渲染 HTML 详情中的普通品牌兼容状态图标"""
+    return _render_status_icon(value)
+
+
+def render_detail_process_compatibility_html(value):
+    """渲染 HTML 详情中的过程态品牌兼容状态图标"""
+    return _render_status_icon(value)
+
+
 def load_yaml_data():
     """加载YAML源数据"""
     yaml_file = os.path.join(DATA_DIR, 'au_vpp_partners.yaml')
@@ -59,6 +114,8 @@ def generate_markdown(data):
     # 注册自定义过滤器
     env.filters['render_compatibility'] = render_compatibility
     env.filters['render_process_compatibility'] = render_process_compatibility
+    env.filters['render_detail_compatibility'] = render_detail_compatibility
+    env.filters['render_detail_process_compatibility'] = render_detail_process_compatibility
 
     template = env.get_template('markdown_template.md')
 
@@ -66,6 +123,32 @@ def generate_markdown(data):
     context = dict(data)
     context['render_compatibility'] = render_compatibility
     context['render_process_compatibility'] = render_process_compatibility
+    context['render_detail_compatibility'] = render_detail_compatibility
+    context['render_detail_process_compatibility'] = render_detail_process_compatibility
+
+    return template.render(**context)
+
+
+def generate_html_markdown(data):
+    """生成用于 HTML 的 Markdown 内容"""
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATE_DIR),
+        trim_blocks=True,
+        lstrip_blocks=True
+    )
+
+    env.filters['render_compatibility'] = render_compatibility_html
+    env.filters['render_process_compatibility'] = render_process_compatibility_html
+    env.filters['render_detail_compatibility'] = render_detail_compatibility_html
+    env.filters['render_detail_process_compatibility'] = render_detail_process_compatibility_html
+
+    template = env.get_template('markdown_template.md')
+
+    context = dict(data)
+    context['render_compatibility'] = render_compatibility_html
+    context['render_process_compatibility'] = render_process_compatibility_html
+    context['render_detail_compatibility'] = render_detail_compatibility_html
+    context['render_detail_process_compatibility'] = render_detail_process_compatibility_html
 
     return template.render(**context)
 
@@ -75,7 +158,7 @@ def markdown_to_html(md_content, data):
     # 扩展功能
     html_content = markdown.markdown(
         md_content,
-        extensions=['tables', 'fenced_code', 'nl2br']
+        extensions=['tables', 'fenced_code', 'nl2br', 'md_in_html']
     )
 
     # 添加HTML头部和样式
@@ -174,13 +257,46 @@ def markdown_to_html(md_content, data):
         .priority-high {{ background: #fef2f2; color: var(--danger); }}
         .priority-medium {{ background: #fffbeb; color: var(--warning); }}
         .priority-low {{ background: #f0fdf4; color: var(--success); }}
-        .compat {{
-            font-size: 12px;
+        .status-icon {{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1;
+            border: 1px solid currentColor;
+            background: #fff;
         }}
-        .compat-yes {{ color: var(--success); }}
-        .compat-no {{ color: var(--muted); }}
-        .compat-testing {{ color: var(--warning); }}
-        .compat-pending {{ color: var(--text-secondary); }}
+        .status-compatible {{
+            color: var(--success);
+            background: #f0fdf4;
+        }}
+        .status-incompatible {{
+            color: var(--danger);
+            background: #fef2f2;
+        }}
+        .status-unknown {{
+            color: var(--muted);
+            background: #f8fafc;
+        }}
+        .status-testing {{
+            color: var(--warning);
+            background: #fffbeb;
+        }}
+        .status-pending {{
+            color: var(--text-secondary);
+            background: #f5f5f5;
+        }}
+        .status-discussing {{
+            color: var(--accent);
+            background: var(--accent-light);
+        }}
+        td:has(.status-icon), th:has(.status-icon) {{
+            text-align: center;
+        }}
         .tag {{
             display: inline-block;
             background: var(--accent-light);
@@ -280,7 +396,8 @@ def main():
 
     # 生成 HTML
     print("生成 HTML...")
-    html_content = markdown_to_html(md_content, data)
+    html_md_content = generate_html_markdown(data)
+    html_content = markdown_to_html(html_md_content, data)
 
     # 保存 HTML
     html_file = os.path.join(OUTPUT_DIR, 'au_vpp_partners.html')

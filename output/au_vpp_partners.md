@@ -1,12 +1,12 @@
 # 澳洲三方平台兼容性跟踪
 
 > 区域：AU
-> 最后更新：2026-03-12
+> 最后更新：2026-03-13
 > 数据源：主数据 YAML
 > 主线品牌：Growatt
 > 说明：本文档由 YAML 自动生成，请勿作为主数据直接维护。
 
-<div class="card">
+<div class="card" markdown="1">
 
 ## 1. PM / PLM 总览
 
@@ -14,7 +14,7 @@
 |---|---|---|---:|---|---|---|
 | Switch DIN | 中 | √ | 74 | 已在对方清单 | 兼容已确认，暂无新增推进动作 | 补全 Switch DIN 官方兼容页面并确认是否可对外引用 |
 | CovaU | 中 | √ | 73 | 已在对方清单 | 兼容已确认，尚未展开深度商务动作 | 确认 CovaU 对 Growatt 的具体接入范围和对外说法 |
-| Evergen | 高 | 未进入 | 92 | 已在对方清单 | 停留在外部兼容清单观察阶段 | 获取 Evergen 技术接口和认证流程，启动首次对接 |
+| Evergen | 高 | √ | 92 | 已在对方清单 | 兼容已确认，可转入案例沉淀 | 补充 Evergen 官方 Growatt 兼容证据并整理为可复用案例 |
 | Amber | 高 | 测试中 | 88 | 沟通中 | 已约 2026-03-16 16:00-16:30 技术交流 | 完成与 Amber 的 2026-03-16 16:00-16:30 技术交流并确认对接范围 |
 | Origin | 高 | 待排期 | 86 | 沟通中 | 等待三方 kick-off meeting 排期确认 | 锁定三方 kick-off 时间并确认参会角色 |
 | Globird | 中 | 未进入 | 80 | 沟通中 | 等待测试环境和接入样本准备 | 组织 100 个客户接入样本并搭建测试环境 |
@@ -26,7 +26,7 @@
 
 </div>
 
-<div class="card">
+<div class="card" markdown="1">
 
 ## 2. Competitor Analysis
 
@@ -34,7 +34,7 @@
 |---|---|---|---|---|---|---|---|---|
 | Switch DIN | √ |  |  | √ | √ | √ | √ | Sungrow / SolaX / Goodwe / Alpha 已兼容；Growatt 已具备进入条件，适合作为已完成样板 |
 | CovaU | √ |  | √ |  |  |  | √ | FOXESS / Alpha 已兼容；Growatt 已兼容，可作为轻量参考样板 |
-| Evergen | 未进入 | √ | √ | √ | √ | √ | √ | 六个主竞品品牌均已兼容；属于最明显的 Growatt 覆盖缺口 |
+| Evergen | √ | √ | √ | √ | √ | √ | √ | 六个主竞品品牌均已兼容；Growatt 已补齐兼容覆盖，可作为重点参考案例 |
 | Amber | 测试中 | √ | √ | √ |  |  | √ | Sigen / FOXESS / Sungrow / Alpha 已兼容；Growatt 已从空白进入测试推进 |
 | Origin | 待排期 | √ |  | √ | √ | √ | √ | Sigen / Sungrow / SolaX / Goodwe / Alpha 已兼容；Growatt 已进入排期等待 |
 | Globird | 未进入 | √ |  | √ | √ |  | √ | Sigen / Sungrow / SolaX / Alpha 已兼容；Growatt 尚未形成公开兼容 |
@@ -48,7 +48,7 @@
 
 ## 3. 平台详情
 
-<div class="card">
+<div class="card" markdown="1">
 
 ### Switch DIN
 
@@ -86,13 +86,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | unknown |
-| FOXESS | unknown |
-| Sungrow | compatible |
-| SolaX | compatible |
-| Goodwe | compatible |
-| Alpha | compatible |
-| Growatt | compatible |
+| Sigen Energy | 未知 |
+| FOXESS | 未知 |
+| Sungrow | 兼容 |
+| SolaX | 兼容 |
+| Goodwe | 兼容 |
+| Alpha | 兼容 |
+| Growatt | 兼容 |
 
 **其他品牌**: Solaredge
 
@@ -133,7 +133,7 @@
 <span class="tag">Growatt 已兼容</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### CovaU
 
@@ -171,13 +171,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | unknown |
-| FOXESS | compatible |
-| Sungrow | unknown |
-| SolaX | unknown |
-| Goodwe | unknown |
-| Alpha | compatible |
-| Growatt | compatible |
+| Sigen Energy | 未知 |
+| FOXESS | 兼容 |
+| Sungrow | 未知 |
+| SolaX | 未知 |
+| Goodwe | 未知 |
+| Alpha | 兼容 |
+| Growatt | 兼容 |
 
 
 #### 推进状态
@@ -217,7 +217,7 @@
 <span class="tag">Growatt 已兼容</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Evergen
 
@@ -248,47 +248,48 @@
 #### 决策摘要
 
 - **匹配度**: 92 / 100（高匹配）
-- **匹配判断**: 典型高价值缺口平台。竞品覆盖完整，但 Growatt 尚未进入，适合作为主战场优先突破。
-- **Growatt 定位**: 高优先级补位目标
+- **匹配判断**: Evergen 已确认兼容 Growatt，且竞品覆盖完整，是澳洲市场里很有代表性的高价值兼容案例。
+- **Growatt 定位**: 已兼容重点案例
 
 #### 品牌兼容情况
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | compatible |
-| Sungrow | compatible |
-| SolaX | compatible |
-| Goodwe | compatible |
-| Alpha | compatible |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 兼容 |
+| Sungrow | 兼容 |
+| SolaX | 兼容 |
+| Goodwe | 兼容 |
+| Alpha | 兼容 |
+| Growatt | 兼容 |
 
 **其他品牌**: Anker、Deye、Solaredge
 
 #### 推进状态
 
 - **当前阶段**: 已在对方清单
-- **当前阶段说明**: 停留在外部兼容清单观察阶段
-- **下一步动作**: 发起对接，确认 Growatt 进入兼容/测试的门槛。
-- **下一任务**: 获取 Evergen 技术接口和认证流程，启动首次对接
-- **任务 Owner**: Growatt BD + 产品
-- **成功标准**: 明确接入门槛、所需资料和测试路径
+- **当前阶段说明**: 兼容已确认，可转入案例沉淀
+- **下一步动作**: 沉淀 Evergen × Growatt 兼容证据，并确认可对外引用的案例表述。
+- **下一任务**: 补充 Evergen 官方 Growatt 兼容证据并整理为可复用案例
+- **任务 Owner**: 内部产品运营
+- **成功标准**: 形成可对内对外复用的兼容说明和引用链接
 
 #### Competitor Highlights
 
 - 六个主竞品品牌均已兼容
-- 属于最明显的 Growatt 覆盖缺口
+- Growatt 已补齐兼容覆盖，可作为重点参考案例
 
 #### 备注
 
-- OEM requirement 文档链接为截断状态，建议补全。
+- Evergen 官方已提供 Growatt 独立集成页。
+- OEM requirement 文档链接仍为截断状态，建议后续补全。
 
 
 #### 全过程日志
 
 | 日期 | 类型 | 事件 | 结果 |
 |---|---|---|---|
-| 2026-03-12 | 桌面研究 | 复核 Evergen integrated partners 清单 | 确认六大主竞品均已兼容，Growatt 仍为空白 |
+| 2026-03-13 | 桌面研究 | 复核 Evergen Growatt 官方集成页 | 确认 Growatt 已兼容并具备独立官方页面 |
 
 
 #### 链接
@@ -301,10 +302,10 @@
 
 <span class="tag">重点平台</span>
 <span class="tag">竞品领先</span>
-<span class="tag">Growatt 缺口</span>
+<span class="tag">Growatt 已兼容</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Amber
 
@@ -342,13 +343,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | compatible |
-| Sungrow | compatible |
-| SolaX | incompatible |
-| Goodwe | incompatible |
-| Alpha | compatible |
-| Growatt | testing |
+| Sigen Energy | 兼容 |
+| FOXESS | 兼容 |
+| Sungrow | 兼容 |
+| SolaX | 未兼容 |
+| Goodwe | 未兼容 |
+| Alpha | 兼容 |
+| Growatt | 测试中 |
 
 **其他品牌**: Solaredge、Anker
 
@@ -392,7 +393,7 @@
 <span class="tag">Growatt 主线</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Origin
 
@@ -430,13 +431,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | compatible |
-| SolaX | compatible |
-| Goodwe | compatible |
-| Alpha | compatible |
-| Growatt | pending_schedule |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 兼容 |
+| SolaX | 兼容 |
+| Goodwe | 兼容 |
+| Alpha | 兼容 |
+| Growatt | 待排期 |
 
 **其他品牌**: Solaredge、Anker
 
@@ -480,7 +481,7 @@
 <span class="tag">Growatt 主线</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Globird
 
@@ -518,13 +519,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | compatible |
-| SolaX | compatible |
-| Goodwe | unknown |
-| Alpha | compatible |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 兼容 |
+| SolaX | 兼容 |
+| Goodwe | 未知 |
+| Alpha | 兼容 |
+| Growatt | 未知 |
 
 
 #### 推进状态
@@ -567,7 +568,7 @@
 <span class="tag">资源依赖</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### ShineHub
 
@@ -605,13 +606,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | unknown |
-| SolaX | unknown |
-| Goodwe | unknown |
-| Alpha | unknown |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 未知 |
+| SolaX | 未知 |
+| Goodwe | 未知 |
+| Alpha | 未知 |
+| Growatt | 未知 |
 
 
 #### 推进状态
@@ -651,7 +652,7 @@
 <span class="tag">商务评估</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### AGL
 
@@ -689,13 +690,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | compatible |
-| SolaX | unknown |
-| Goodwe | unknown |
-| Alpha | compatible |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 兼容 |
+| SolaX | 未知 |
+| Goodwe | 未知 |
+| Alpha | 兼容 |
+| Growatt | 未知 |
 
 **其他品牌**: Solaredge
 
@@ -734,7 +735,7 @@
 
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Manta
 
@@ -772,13 +773,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | unknown |
-| FOXESS | unknown |
-| Sungrow | unknown |
-| SolaX | unknown |
-| Goodwe | compatible |
-| Alpha | unknown |
-| Growatt | discussing |
+| Sigen Energy | 未知 |
+| FOXESS | 未知 |
+| Sungrow | 未知 |
+| SolaX | 未知 |
+| Goodwe | 兼容 |
+| Alpha | 未知 |
+| Growatt | 沟通中 |
 
 
 #### 推进状态
@@ -821,7 +822,7 @@
 <span class="tag">会议待执行</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Future X Power
 
@@ -859,13 +860,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | unknown |
-| SolaX | unknown |
-| Goodwe | unknown |
-| Alpha | unknown |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 未知 |
+| SolaX | 未知 |
+| Goodwe | 未知 |
+| Alpha | 未知 |
+| Growatt | 未知 |
 
 
 #### 推进状态
@@ -904,7 +905,7 @@
 <span class="tag">生态背景</span>
 
 </div>
-<div class="card">
+<div class="card" markdown="1">
 
 ### Ecotricity
 
@@ -942,13 +943,13 @@
 
 | 品牌 | 状态 |
 |---|---|
-| Sigen Energy | compatible |
-| FOXESS | unknown |
-| Sungrow | unknown |
-| SolaX | unknown |
-| Goodwe | unknown |
-| Alpha | unknown |
-| Growatt | unknown |
+| Sigen Energy | 兼容 |
+| FOXESS | 未知 |
+| Sungrow | 未知 |
+| SolaX | 未知 |
+| Goodwe | 未知 |
+| Alpha | 未知 |
+| Growatt | 未知 |
 
 
 #### 推进状态
