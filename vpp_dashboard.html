@@ -215,7 +215,7 @@
       background: linear-gradient(135deg, rgba(188, 95, 46, 0.1), rgba(255, 255, 255, 0.55));
       border: 1px solid var(--line);
       border-radius: 22px;
-      padding: 18px;
+      padding: 16px;
     }
 
     .focus-card h2,
@@ -239,7 +239,7 @@
     .compact-list li,
     .clean-list li,
     .log-list li {
-      margin: 8px 0;
+      margin: 6px 0;
       color: var(--muted);
     }
 
@@ -337,8 +337,8 @@
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 22px;
-      padding: 18px;
-      margin-bottom: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: 0.18s ease;
     }
@@ -393,16 +393,16 @@
 
     .opportunity-rows {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 0;
     }
 
     .metric {
       background: var(--panel-strong);
       border: 1px solid var(--line);
       border-radius: 16px;
-      padding: 12px 14px;
+      padding: 10px 12px;
     }
 
     .metric-label {
@@ -416,13 +416,6 @@
       margin-top: 6px;
       font-size: 14px;
       line-height: 1.45;
-    }
-
-    .summary {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-      margin-bottom: 12px;
     }
 
     .brand-row {
@@ -463,8 +456,50 @@
     .brand-chip.unknown,
     .brand-chip.incompatible { background: rgba(117, 98, 82, 0.1); color: var(--muted); }
 
+    .status-cell {
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .status-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      background: rgba(255, 255, 255, 0.82);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .status-icon.compatible {
+      color: var(--teal);
+      background: rgba(31, 122, 109, 0.12);
+    }
+
+    .status-icon.testing {
+      color: var(--gold);
+      background: var(--gold-soft);
+    }
+
+    .status-icon.pending_schedule,
+    .status-icon.discussing {
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .status-icon.unknown,
+    .status-icon.incompatible {
+      color: var(--muted);
+      background: rgba(117, 98, 82, 0.1);
+    }
+
     .detail-card {
-      padding: 22px;
+      padding: 20px;
       min-height: 100%;
     }
 
@@ -501,15 +536,15 @@
     .detail-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .detail-block {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 16px;
+      padding: 14px;
     }
 
     .detail-block h3 {
@@ -520,8 +555,64 @@
     .detail-block p {
       margin: 0;
       color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .detail-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .mini-list {
+      margin: 0;
+      padding-left: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .mini-list li + li {
+      margin-top: 6px;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .icon-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-radius: 14px;
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .link-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .link-row span {
+      white-space: nowrap;
     }
 
     table {
@@ -610,6 +701,10 @@
       .opportunity-rows {
         grid-template-columns: 1fr 1fr;
       }
+
+      .icon-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 760px) {
@@ -618,6 +713,10 @@
       .stats,
       .detail-grid,
       .opportunity-rows {
+        grid-template-columns: 1fr;
+      }
+
+      .icon-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -779,6 +878,30 @@
       return labelMap[value] || value || "未注明";
     }
 
+    function clip(text, limit = 52) {
+      const value = (text || "").replace(/\s+/g, " ").trim();
+      if (!value) return "-";
+      return value.length > limit ? `${value.slice(0, limit - 1)}…` : value;
+    }
+
+    function statusGlyph(value) {
+      const glyphMap = {
+        compatible: "✓",
+        testing: "◐",
+        pending_schedule: "◷",
+        discussing: "◎",
+        unknown: "○",
+        incompatible: "×",
+      };
+      return glyphMap[value] || "○";
+    }
+
+    function renderStatusIcon(value, isPrimary = false) {
+      const safeValue = value || "unknown";
+      const label = isPrimary ? renderGrowattStatus(safeValue) : renderCommonStatus(safeValue);
+      return `<span class="status-icon ${statusClass(safeValue)}" title="${label}" aria-label="${label}">${statusGlyph(safeValue)}</span>`;
+    }
+
     function parseDate(input) {
       if (!input) return 0;
       return new Date(input).getTime() || 0;
@@ -830,7 +953,7 @@
       const competitorLead = records.filter((r) => competitorCompatibleCount(r) >= 3 && r.compatibility?.[mainBrand] !== "compatible").length;
 
       $("datasetTitle").textContent = `${brandLabel(mainBrand)} AU VPP Dashboard`;
-      $("datasetMeta").textContent = `SSOT: YAML。主线品牌为 ${brandLabel(mainBrand)}，其余品牌用于 competitor analysis。重点观察匹配度、当前阶段、下一任务和全过程日志。`;
+      $("datasetMeta").textContent = `主线推进、竞品覆盖、下一动作。`;
       $("heroMeta").innerHTML = [
         `区域 ${state.data?.region || "-"}`,
         `最后更新 ${state.data?.last_updated || "-"}`,
@@ -853,9 +976,8 @@
       `).join("");
 
       const focus = [
-        `优先拿下匹配度 >= 80 且 Growatt 尚未兼容的平台。`,
-        `把“待排期 / 沟通中 / 测试中”的平台从信息确认推进到明确时间表。`,
-        `保留已兼容平台作为样板，但资源优先给高匹配缺口。`,
+        `先推高匹配缺口。`,
+        `把排期和沟通尽快落到会议。`,
       ];
       $("focusList").innerHTML = focus.map((item) => `<li>${item}</li>`).join("");
 
@@ -866,7 +988,7 @@
 
       $("nextActions").innerHTML = topActions.map((record) => {
         const task = record.progress?.next_task?.task || record.progress?.next_action || "待补充";
-        return `<li><strong>${record.partner_name}</strong>：${task}</li>`;
+        return `<li><strong>${record.partner_name}</strong>：${clip(task, 34)}</li>`;
       }).join("");
     }
 
@@ -1001,15 +1123,15 @@
       if (view === "main") {
         records = sortForMain(records);
         title = "Growatt 主线机会池";
-        subtitle = "优先显示 Growatt 未完成兼容的平台，并把已兼容样板放在后面。";
+        subtitle = "先看未兼容和推进中。";
       } else if (view === "competitor") {
         records = sortForCompetitor(records);
         title = "Competitor Analysis";
-        subtitle = "看哪些平台已经被竞品覆盖，而 Growatt 仍处于空白或推进中。";
+        subtitle = "看竞品覆盖与 Growatt 缺口。";
       } else {
         records = sortForLedger(records);
         title = "全量台账";
-        subtitle = "按优先级和匹配度浏览全部平台记录。";
+        subtitle = "全部平台，一屏扫完。";
       }
 
       ensureSelection(records);
@@ -1057,24 +1179,18 @@
 
           <div class="brand-row">
             <span class="pill stage-${record.progress?.overall_stage || "unknown"}">${enumText("integration_stage", record.progress?.overall_stage, "未知")}</span>
-            <span class="score-chip ${record.analysis?.matching_band || "medium"}">${enumText("matching_band", record.analysis?.matching_band, "中匹配")}</span>
             <span class="brand-chip ${statusClass(record.compatibility?.[mainBrand])}">${brandLabel(mainBrand)} ${renderGrowattStatus(record.compatibility?.[mainBrand])}</span>
           </div>
 
           <div class="opportunity-rows">
             <div class="metric">
-              <div class="metric-label">当前阶段</div>
-              <div class="metric-value">${record.progress?.current_phase || record.progress?.summary || "-"}</div>
+              <div class="metric-label">当前</div>
+              <div class="metric-value">${clip(record.progress?.current_phase || record.progress?.summary || "-", 44)}</div>
             </div>
             <div class="metric">
-              <div class="metric-label">下一任务</div>
-              <div class="metric-value">${record.progress?.next_task?.task || record.progress?.next_action || "-"}</div>
+              <div class="metric-label">下一步</div>
+              <div class="metric-value">${clip(record.progress?.next_task?.task || record.progress?.next_action || "-", 44)}</div>
             </div>
-          </div>
-
-          <div class="summary">${record.analysis?.matching_summary || "未填写匹配分析。"}</div>
-          <div class="brand-row">
-            ${safeArray(record.analysis?.competitor_highlights).slice(0, 2).map((item) => `<span class="meta-chip">${item}</span>`).join("")}
           </div>
         </article>
       `).join("")}</div>`;
@@ -1104,9 +1220,9 @@
                     <div class="card-meta">${record.category || "-"}</div>
                   </td>
                   <td>${record.analysis?.matching_score || 0}</td>
-                  <td>${renderGrowattStatus(record.compatibility?.[primaryBrand()])}</td>
+                  <td class="status-cell">${renderStatusIcon(record.compatibility?.[primaryBrand()], true)}</td>
                   <td>${competitorCompatibleCount(record)}</td>
-                  ${competitorBrands().map((key) => `<td>${renderCommonStatus(record.compatibility?.[key])}</td>`).join("")}
+                  ${competitorBrands().map((key) => `<td class="status-cell">${renderStatusIcon(record.compatibility?.[key])}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -1140,7 +1256,7 @@
                   <td>${enumText("priority_level", record.priority, record.priority)}</td>
                   <td>${enumText("integration_stage", record.progress?.overall_stage, "未知")}</td>
                   <td>${record.analysis?.matching_score || 0}</td>
-                  ${brands.map((key) => `<td>${key === primaryBrand() ? renderGrowattStatus(record.compatibility?.[key]) : renderCommonStatus(record.compatibility?.[key])}</td>`).join("")}
+                  ${brands.map((key) => `<td class="status-cell">${renderStatusIcon(record.compatibility?.[key], key === primaryBrand())}</td>`).join("")}
                 </tr>
               `).join("")}
             </tbody>
@@ -1180,6 +1296,11 @@
       const remarks = safeArray(record.progress?.remarks);
       const blockers = safeArray(record.progress?.blockers);
       const logs = [...safeArray(record.progress?.log_entries)].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+      const competitorHighlights = safeArray(record.analysis?.competitor_highlights).slice(0, 3);
+      const compactNotes = [...remarks, ...blockers].slice(0, 4);
+      const compactLogs = logs.slice(0, 4);
+      const hasCommercial = Boolean(record.commercial?.pricing_note || record.commercial?.business_note);
+      const hasLinks = Boolean(platformUrl || docUrl || refs.length);
 
       $("detailPane").innerHTML = `
         <div class="detail-card">
@@ -1187,6 +1308,7 @@
             <div>
               <h2>${record.partner_name}</h2>
               <div class="detail-meta">ID: ${record.id} · ${record.country || "-"} · ${record.category || "-"} · ${enumText("priority_level", record.priority, record.priority)}</div>
+              <div class="detail-kicker">${clip(record.analysis?.growatt_position || record.analysis?.matching_summary || "-", 68)}</div>
             </div>
             <div class="score-box">
               <strong>${record.analysis?.matching_score || 0}</strong>
@@ -1196,42 +1318,38 @@
 
           <div class="brand-row" style="margin-bottom:16px;">
             <span class="pill stage-${record.progress?.overall_stage || "unknown"}">${enumText("integration_stage", record.progress?.overall_stage, "未知")}</span>
-            <span class="score-chip ${record.analysis?.matching_band || "medium"}">${enumText("matching_band", record.analysis?.matching_band, "中匹配")}</span>
             <span class="brand-chip ${statusClass(record.compatibility?.[primaryBrand()])}">${brandLabel(primaryBrand())} ${renderGrowattStatus(record.compatibility?.[primaryBrand()])}</span>
           </div>
 
           <div class="detail-grid">
             <div class="detail-block">
-              <h3>匹配判断</h3>
-              <p>${record.analysis?.matching_summary || "-"}</p>
-            </div>
-            <div class="detail-block">
-              <h3>Growatt 定位</h3>
-              <p>${record.analysis?.growatt_position || "-"}</p>
-            </div>
-            <div class="detail-block">
-              <h3>当前阶段</h3>
+              <h3>当前</h3>
               <p>${record.progress?.current_phase || record.progress?.summary || "-"}</p>
             </div>
             <div class="detail-block">
-              <h3>下一任务</h3>
+              <h3>下一步</h3>
               <p>${record.progress?.next_task?.task || record.progress?.next_action || "-"}</p>
+              <p style="margin-top:8px;">${record.progress?.next_task?.owner || record.progress?.owner || "-"}</p>
             </div>
           </div>
 
           <div class="detail-grid">
             <div class="detail-block">
-              <h3>任务责任</h3>
-              <p>Owner: ${record.progress?.next_task?.owner || record.progress?.owner || "-"}</p>
-              <p style="margin-top:8px;">成功标准: ${record.progress?.next_task?.success_metric || "-"}</p>
+              <h3>成功标准</h3>
+              <p>${record.progress?.next_task?.success_metric || "-"}</p>
             </div>
             <div class="detail-block">
-              <h3>竞品态势</h3>
-              <div class="brand-row">
+              <h3>品牌状态</h3>
+              <div class="icon-grid">
+                <div class="icon-chip">
+                  <span>${brandLabel(primaryBrand())}</span>
+                  ${renderStatusIcon(record.compatibility?.[primaryBrand()], true)}
+                </div>
                 ${competitorBrands().map((key) => `
-                  <span class="brand-chip ${statusClass(record.compatibility?.[key])}">
-                    ${brandLabel(key)} ${renderCommonStatus(record.compatibility?.[key])}
-                  </span>
+                  <div class="icon-chip">
+                    <span>${brandLabel(key)}</span>
+                    ${renderStatusIcon(record.compatibility?.[key])}
+                  </div>
                 `).join("")}
               </div>
             </div>
@@ -1239,37 +1357,42 @@
 
           <div class="detail-grid">
             <div class="detail-block">
-              <h3>Competitor Highlights</h3>
-              ${safeArray(record.analysis?.competitor_highlights).length
-                ? `<ul class="clean-list">${safeArray(record.analysis?.competitor_highlights).map((item) => `<li>${item}</li>`).join("")}</ul>`
+              <h3>亮点</h3>
+              ${competitorHighlights.length
+                ? `<ul class="mini-list">${competitorHighlights.map((item) => `<li>${clip(item, 60)}</li>`).join("")}</ul>`
                 : `<p>-</p>`}
             </div>
             <div class="detail-block">
-              <h3>备注与阻塞</h3>
-              ${remarks.length ? `<ul class="clean-list">${remarks.map((item) => `<li>${item}</li>`).join("")}</ul>` : `<p>备注：无</p>`}
-              ${blockers.length ? `<ul class="clean-list">${blockers.map((item) => `<li>${item}</li>`).join("")}</ul>` : `<p style="margin-top:8px;">阻塞：无</p>`}
+              <h3>备注</h3>
+              ${compactNotes.length ? `<ul class="mini-list">${compactNotes.map((item) => `<li>${clip(item, 60)}</li>`).join("")}</ul>` : `<p>无</p>`}
             </div>
           </div>
 
           <div class="detail-grid">
+            ${hasCommercial ? `
             <div class="detail-block">
-              <h3>商务信息</h3>
-              <p>报价说明：${record.commercial?.pricing_note || "无"}</p>
-              <p style="margin-top:8px;">商务备注：${record.commercial?.business_note || "无"}</p>
+              <h3>商务</h3>
+              <p>${record.commercial?.pricing_note || record.commercial?.business_note || "无"}</p>
+              ${record.commercial?.pricing_note && record.commercial?.business_note ? `<p style="margin-top:8px;">${record.commercial.business_note}</p>` : ""}
             </div>
+            ` : ""}
+            ${hasLinks ? `
             <div class="detail-block link">
               <h3>链接</h3>
-              <p>平台链接：${platformUrl ? `<a href="${platformUrl}" target="_blank">${platformUrl}</a>` : "无"}</p>
-              <p style="margin-top:8px;">需求文档：${docUrl ? `<a href="${docUrl}" target="_blank">${docUrl}</a>` : "无"}</p>
-              <p style="margin-top:8px;">参考链接：${refs.length ? refs.map((url) => `<a href="${url}" target="_blank">${url}</a>`).join("；") : "无"}</p>
+              <div class="link-stack">
+                ${platformUrl ? `<div class="link-row"><span>平台</span><a href="${platformUrl}" target="_blank">打开</a></div>` : ""}
+                ${docUrl ? `<div class="link-row"><span>文档</span><a href="${docUrl}" target="_blank">打开</a></div>` : ""}
+                ${refs.slice(0, 2).map((url, index) => `<div class="link-row"><span>参考 ${index + 1}</span><a href="${url}" target="_blank">打开</a></div>`).join("")}
+              </div>
             </div>
+            ` : ""}
           </div>
 
           <div class="detail-block" style="margin-top:12px;">
-            <h3>平台过程日志</h3>
-            ${logs.length ? `
+            <h3>最近日志</h3>
+            ${compactLogs.length ? `
               <ul class="log-list" style="padding-left:0;">
-                ${logs.map((item) => `
+                ${compactLogs.map((item) => `
                   <li class="log-item">
                     <div class="log-top">
                       <span class="log-date">${item.date || "-"}</span>
@@ -1287,7 +1410,7 @@
     }
 
     function renderGlobalTimeline(records) {
-      const logs = globalLogs(records).slice(0, 24);
+      const logs = globalLogs(records).slice(0, 12);
       $("globalTimeline").innerHTML = logs.length ? `
         <ul class="log-list" style="padding-left:0; margin-top:0;">
           ${logs.map((item) => `
